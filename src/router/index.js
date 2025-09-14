@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import HelloWorldPage from '../views/HelloWorldPage.vue'
 import CounterPage from '../views/CounterPage.vue'
 import UserProfilePage from '../views/UserProfilePage.vue'
+import ScrollNavPage from '../views/ScrollNavPage.vue'
 
 const routes = [
   {
@@ -13,6 +14,16 @@ const routes = [
       title: 'Home',
       icon: '🏠',
       description: 'Welcome to Vue 3 Demo'
+    }
+  },
+  {
+    path: '/scroll-demo',
+    name: 'ScrollNavDemo',
+    component: ScrollNavPage,
+    meta: {
+      title: 'Scroll Nav',
+      icon: '🧭',
+      description: 'Sticky navbar with smooth scroll'
     }
   },
   {
