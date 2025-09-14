@@ -32,7 +32,116 @@
         <h2 :id="`${item.id}-title`" class="section-title">{{ item.icon }} {{ item.label }}</h2>
         <p class="section-text">{{ item.description }}</p>
 
-        <div class="card-grid">
+        <!-- Lifecycle education block -->
+        <div v-if="item.id === 'lifecycle'" class="lifecycle-grid">
+          <div class="card wide">
+            <div class="card-icon">🗺️</div>
+            <h3 class="card-title">Vue Lifecycle Overview Diagram</h3>
+            <p class="card-desc">A high-level map of how a component moves from setup to mounted, updates, and unmount.</p>
+            <figure class="diagram">
+              <a href="https://vuejs.org/assets/lifecycle.MuZLBFAS.png" target="_blank" rel="noopener noreferrer" aria-label="Open lifecycle diagram in a new tab">
+                <img
+                  src="https://vuejs.org/assets/lifecycle.MuZLBFAS.png"
+                  alt="Vue component lifecycle flowchart showing setup, mount, update, and unmount phases"
+                  loading="lazy"
+                />
+              </a>
+              <figcaption>Source: vuejs.org — click the image to view full size.</figcaption>
+            </figure>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">⚙️</div>
+            <h3 class="card-title">What is a Lifecycle Hook?</h3>
+            <p class="card-desc">
+              Every Vue component goes through a series of stages: it is created, mounted to the DOM, updated when its data changes, and finally unmounted.
+              <strong>Lifecycle hooks</strong> let you run code at specific stages.
+            </p>
+            <div class="callout">
+              Think of hooks as “events” that fire at predictable times in a component’s life.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🟢</div>
+            <h3 class="card-title">onMounted()</h3>
+            <p class="card-desc">
+              Runs once after the component is added to the page and its template is in the DOM. Perfect for code that needs real DOM nodes or browser APIs.
+            </p>
+            <pre class="code-block" v-pre><code>import { onMounted } from 'vue'
+
+onMounted(() => {
+  // Safe to touch the DOM here
+  const el = document.getElementById('intro')
+  console.log('Mounted! Section exists?', !!el)
+
+  // Typical uses:
+  // - Add event listeners
+  // - Fetch data
+  // - Start timers/intervals
+  // - Initialize libraries that need DOM
+})</code></pre>
+            <div class="callout tip">
+              Tip: If your code needs to read sizes/positions of elements, do it in <code>onMounted</code> so the DOM is ready.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔴</div>
+            <h3 class="card-title">onBeforeUnmount()</h3>
+            <p class="card-desc">
+              Runs right before the component is removed from the page. Use it to <strong>clean up</strong> anything you started in <code>onMounted</code>.
+            </p>
+            <pre class="code-block" v-pre><code>import { onMounted, onBeforeUnmount } from 'vue'
+
+let intervalId
+
+onMounted(() => {
+  intervalId = setInterval(() => console.log('tick'), 1000)
+})
+
+onBeforeUnmount(() => {
+  // Clean up listeners, timers, observers, etc.
+  clearInterval(intervalId)
+})</code></pre>
+            <div class="callout warn">
+              Always pair setup and cleanup. Forgetting cleanup can cause memory leaks and weird bugs when components are toggled.
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔍</div>
+            <h3 class="card-title">How this page uses them</h3>
+            <ul class="bullet-list">
+              <li>In <code>onMounted</code>, we create an <code>IntersectionObserver</code> to track which section is visible.</li>
+              <li>In <code>onBeforeUnmount</code>, we call <code>observer.disconnect()</code> to remove it when leaving the page.</li>
+              <li>This is a classic setup/cleanup pattern you’ll use often.</li>
+            </ul>
+            <pre class="code-block" v-pre><code>let observer
+
+onMounted(() => {
+  observer = new IntersectionObserver(/* ... */)
+  document.querySelectorAll('section').forEach(el => observer.observe(el))
+})
+
+onBeforeUnmount(() => {
+  if (observer) observer.disconnect()
+})</code></pre>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🧠</div>
+            <h3 class="card-title">Mental model</h3>
+            <ul class="bullet-list">
+              <li><strong>Mount</strong>: component appears → start things.</li>
+              <li><strong>Update</strong>: data changes → DOM updates (no special hook needed most of the time).</li>
+              <li><strong>Before unmount</strong>: component about to disappear → stop things.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Default content for other sections -->
+        <div v-else class="card-grid">
           <div class="card" v-for="n in 3" :key="`${item.id}-${n}`">
             <div class="card-icon">✨</div>
             <h3 class="card-title">Sample content {{ n }}</h3>
@@ -49,10 +158,11 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 const sections = [
-  { id: 'intro',    label: 'Intro',    icon: '👋', description: 'Overview of the in-page navbar behavior with smooth scrolling.' },
-  { id: 'features', label: 'Features', icon: '🧩', description: 'Sticky navbar, smooth scrolling, and active section tracking.' },
-  { id: 'examples', label: 'Examples', icon: '📚', description: 'Practical examples showing how to structure anchor targets.' },
-  { id: 'contact',  label: 'Contact',  icon: '✉️', description: 'A final section as another scroll target for the demo.' }
+  { id: 'intro',      label: 'Intro',      icon: '👋', description: 'Overview of the in-page navbar behavior with smooth scrolling.' },
+  { id: 'features',   label: 'Features',   icon: '🧩', description: 'Sticky navbar, smooth scrolling, and active section tracking.' },
+  { id: 'lifecycle',  label: 'Lifecycle',  icon: '⏱️', description: 'Beginner-friendly explanation of onMounted and onBeforeUnmount.' },
+  { id: 'examples',   label: 'Examples',   icon: '📚', description: 'Practical examples showing how to structure anchor targets.' },
+  { id: 'contact',    label: 'Contact',    icon: '✉️', description: 'A final section as another scroll target for the demo.' }
 ]
 
 const activeSection = ref(sections[0].id)
@@ -208,6 +318,66 @@ onBeforeUnmount(() => {
   opacity: 0.85;
 }
 
+/* Lifecycle education styles */
+.lifecycle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.lifecycle-grid .card.wide {
+  grid-column: 1 / -1;
+}
+
+.code-block {
+  margin-top: 0.5rem;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 0.75rem;
+  overflow-x: auto;
+  line-height: 1.4;
+  font-size: 0.9rem;
+}
+
+.callout {
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.callout.tip {
+  border-color: rgba(66, 184, 131, 0.6);
+}
+
+.callout.warn {
+  border-color: rgba(255, 196, 0, 0.8);
+}
+
+.bullet-list {
+  margin: 0.25rem 0 0.5rem 1rem;
+}
+.bullet-list li { margin: 0.2rem 0; }
+
+.diagram {
+  margin: 0.5rem 0 0 0;
+}
+.diagram img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.diagram figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
 /* Small screens */
 @media (max-width: 768px) {
   .local-navbar {
@@ -215,4 +385,3 @@ onBeforeUnmount(() => {
   }
 }
 </style>
-
