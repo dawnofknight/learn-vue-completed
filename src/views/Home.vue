@@ -2,7 +2,9 @@
   <div class="home">
     <div class="hero">
       <h1>🚀 Vue 3 Composition API Demo</h1>
-      <p class="hero-subtitle">Explore modern Vue.js features with interactive examples</p>
+      <p class="hero-subtitle">
+        Explore modern Vue.js features with interactive examples
+      </p>
     </div>
 
     <div class="features-grid">
@@ -10,21 +12,33 @@
         <div class="feature-icon">👋</div>
         <h3>Hello World</h3>
         <p>Basic component with props, events, and slots demonstration</p>
-        <router-link to="/hello" class="feature-link">Explore →</router-link>
+        <router-link
+          to="/hello"
+          class="feature-link"
+          >Explore →</router-link
+        >
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">🔢</div>
         <h3>Counter</h3>
         <p>Reactive state management and computed properties showcase</p>
-        <router-link to="/counter" class="feature-link">Explore →</router-link>
+        <router-link
+          to="/counter"
+          class="feature-link"
+          >Explore →</router-link
+        >
       </div>
 
       <div class="feature-card">
         <div class="feature-icon">👤</div>
         <h3>User Profile</h3>
         <p>Watchers, lifecycle hooks, and complex state management</p>
-        <router-link to="/profile" class="feature-link">Explore →</router-link>
+        <router-link
+          to="/profile"
+          class="feature-link"
+          >Explore →</router-link
+        >
       </div>
     </div>
 
@@ -154,7 +168,7 @@
 }
 
 .learning-list li::before {
-  content: '✅';
+  content: "✅";
   margin-right: 0.5rem;
 }
 </style>
