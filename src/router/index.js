@@ -5,6 +5,7 @@ import CounterPage from '../views/CounterPage.vue'
 import UserProfilePage from '../views/UserProfilePage.vue'
 import ScrollNavPage from '../views/ScrollNavPage.vue'
 import LoginPage from '../views/LoginPage.vue'
+import UserCrudPage from '../views/UserCrudPage.vue'
 
 const routes = [
   {
@@ -65,6 +66,16 @@ const routes = [
       title: 'Login',
       icon: '🔐',
       description: 'User Authentication'
+    }
+  },
+  {
+    path: '/users',
+    name: 'UserCrud',
+    component: UserCrudPage,
+    meta: {
+      title: 'User Management',
+      icon: '👥',
+      description: 'CRUD operations with MariaDB'
     }
   },
   {

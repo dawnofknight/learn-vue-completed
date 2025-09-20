@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: vue-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: vue_app
+      MYSQL_USER: vue_user
+      MYSQL_PASSWORD: vue_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./docker/mariadb/init:/docker-entrypoint-initdb.d
+    networks:
+      - vue-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vue-app
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - DB_USER=vue_user
+      - DB_PASSWORD=vue_password
+      - DB_NAME=vue_app
+    depends_on:
+      - mariadb
+    networks:
+      - vue-network
+    command: npm run dev
+
+volumes:
+  mariadb_data:
+
+networks:
+  vue-network:
+    driver: bridge
