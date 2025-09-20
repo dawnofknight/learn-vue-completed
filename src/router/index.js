@@ -4,6 +4,7 @@ import HelloWorldPage from '../views/HelloWorldPage.vue'
 import CounterPage from '../views/CounterPage.vue'
 import UserProfilePage from '../views/UserProfilePage.vue'
 import ScrollNavPage from '../views/ScrollNavPage.vue'
+import LoginPage from '../views/LoginPage.vue'
 
 const routes = [
   {
@@ -54,6 +55,16 @@ const routes = [
       title: 'User Profile',
       icon: '👤',
       description: 'Watchers & Lifecycle'
+    }
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginPage,
+    meta: {
+      title: 'Login',
+      icon: '🔐',
+      description: 'User Authentication'
     }
   },
   {
